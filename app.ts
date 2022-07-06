@@ -1,3 +1,12 @@
+import dotenv from "dotenv";
+import path from "path";
+const dotenvResult = dotenv.config({
+  path: path.resolve(__dirname, "../.env"),
+});
+
+if (dotenvResult.error) {
+  throw dotenvResult.error;
+}
 import express from "express";
 import * as http from "http";
 import * as winston from "winston";

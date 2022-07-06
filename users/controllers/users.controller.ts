@@ -20,8 +20,8 @@ class UsersController {
   }
   async createUser(req: express.Request, res: express.Response) {
     req.body.password = await argon2.hash(req.body.password);
-    const user = await usersService.create(req.body);
-    res.status(201).send({ id: user.id });
+    const userId = await usersService.create(req.body);
+    res.status(201).send(userId);
   }
   async patch(req: express.Request, res: express.Response) {
     if (req.body.password) {

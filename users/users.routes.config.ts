@@ -1,8 +1,9 @@
+import BodyValidationMiddleware from "../common/middleware/body.validation.middleware";
 import { CommonRoutesConfig } from "../common/common.routes.config";
 import usersMiddleware from "./middleware/users.middleware";
-import express from "express";
 import usersController from "./controllers/users.controller";
-
+import express from "express";
+import { body } from "express-validator";
 export class UsersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
     super(app, "UsersRoutes");
@@ -12,7 +13,11 @@ export class UsersRoutes extends CommonRoutesConfig {
       .route("/users")
       .get(usersController.listUsers)
       .post(
-        usersMiddleware.validateRequiredUserBodyFields,
+        body("email").isEmail(),
+        body("password")
+          .isLength({ min: 5 })
+          .withMessage("Must include password (5+ characters)"),
+        BodyValidationMiddleware.verifyBodyFieldErrors,
         usersMiddleware.validateSameEmailDoesNotExist,
         usersController.createUser
       );
@@ -24,11 +29,27 @@ export class UsersRoutes extends CommonRoutesConfig {
       .delete(usersController.removeUser);
     this.app.put(
       "/users/:userId",
-      usersMiddleware.validateRequiredUserBodyFields,
+      body("email").isEmail(),
+      body("password")
+        .isLength({ min: 5 })
+        .withMessage(`Must include password (5+ characters)`),
+      body("firstName").isString(),
+      body("lastName").isString(),
+      body("permissionFlags").isInt(),
+      BodyValidationMiddleware.verifyBodyFieldErrors,
       usersMiddleware.validateSameEmailBelongToSameUser,
       usersController.put
     );
     this.app.patch("/users/:userId", [
+      body("email").isEmail().optional(),
+      body("password")
+        .isLength({ min: 5 })
+        .withMessage("Password must be 5+ characters")
+        .optional(),
+      body("firstName").isString().optional(),
+      body("lastName").isString().optional(),
+      body("permissionFlags").isInt().optional(),
+      BodyValidationMiddleware.verifyBodyFieldErrors,
       usersMiddleware.validatePatchEmail,
       usersController.patch,
     ]);
