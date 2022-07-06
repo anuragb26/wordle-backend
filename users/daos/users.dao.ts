@@ -59,11 +59,7 @@ class UsersDao {
     return this.User.deleteOne({ _id: userId }).exec();
   }
   async getUserByEmail(email: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { email: string }) => obj.email === email
-    );
-    let currentUser = this.users[objIndex];
-    return currentUser || null;
+    return this.User.findOne({ email }).exec();
   }
   async getUserByEmailWithPassword(email: string) {
     return this.User.findOne({ email: email })

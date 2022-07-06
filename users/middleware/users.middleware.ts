@@ -23,7 +23,8 @@ class UsersMiddleware {
     next: express.NextFunction
   ) {
     const user = await userService.getUserByEmail(req.body.email);
-    if (user && user.id === req.params.userId) {
+    log("Validating user:", user, req.params.userId, req.body.email);
+    if (user && user._id === req.params.userId) {
       next();
     } else {
       res.status(400).send({ error: "Invalid  email" });
@@ -36,7 +37,7 @@ class UsersMiddleware {
   ) => {
     if (req.body.email) {
       log("Validating email:", req.body.email);
-      this.validateSameEmailBelongToSameUser(req, res, next);
+      await this.validateSameEmailBelongToSameUser(req, res, next);
     } else {
       next();
     }
