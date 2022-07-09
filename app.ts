@@ -4,7 +4,11 @@ const dotenvResult = dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
 
-if (dotenvResult.error) {
+if (
+  process.env.NODE_ENV &&
+  process.env.NODE_ENV !== "PRODUCTION" &&
+  dotenvResult.error
+) {
   throw dotenvResult.error;
 }
 import express from "express";
