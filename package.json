@@ -26,5 +26,8 @@
     "start": "tsc && node --unhandled-rejections=strict ./dist/app.js",
     "debug": "SET DEBUG=* && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
