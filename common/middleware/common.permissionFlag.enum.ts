@@ -1,0 +1,5 @@
+export enum PermissionFlag {
+  PLAY_GAME_PERMISSION = 1,
+  ADD_CATEGORY_PERMISSION = 2,
+  ADMIN_PERMISSION = 2147483647,
+}
